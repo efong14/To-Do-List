@@ -23,8 +23,18 @@ body {
     border-right: none;
 }
 
-.navbar > button {
+.navbar > button{
     border-style: none;
+}
+
+#projectHeader {
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+}
+
+#projectHeader > div {
+    align-self: center;
 }
 
 .content {

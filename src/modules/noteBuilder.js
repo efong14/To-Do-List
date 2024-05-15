@@ -4,10 +4,7 @@ class Note {
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
-    }
-    sayHi() {
-        console.log(this.title)
-    }
+    };
 };
 
 export {Note}

@@ -1,14 +1,15 @@
 import { projectBuilder, projectLibrary } from "./objectBuilder";
 
+const form = document.querySelector('form');
+const noteContainer = document.getElementById('noteContainer');
 const newProjectBtn = document.getElementById('newProject');
 const projectHeader = document.getElementById('projectHeader');
 const projectDialog = document.getElementById('projectDialog');
-const form = document.querySelector('form');
 const projectName = document.getElementById('projectName');
 const submitBtn = document.getElementById('submit')
 const cancelBtn = document.getElementById('cancel')
 
-const newProject = (function() {
+const DOMCreator = (function() {
     newProjectBtn.addEventListener('click', openProjectDialog);
     submitBtn.addEventListener('click', buildProject);
     cancelBtn.addEventListener('click', cancelDialog);
@@ -18,7 +19,13 @@ const newProject = (function() {
         form.reset();
     };
 
+    function cancelDialog(event){
+        event.preventDefault();
+        projectDialog.close();
+    };
+
     function buildProject(){
+        if (projectName.value == ''){return};
         var name = projectName.value;
         projectBuilder(name); 
         appendProject(name);
@@ -27,17 +34,24 @@ const newProject = (function() {
     };
 
     function appendProject(name){
-        const projectText = document.createElement('button');
-        projectText.textContent = `${name}`;
-        projectText.setAttribute('id', name);
-        projectHeader.insertBefore(projectText, newProjectBtn);
+        const projectBtn = document.createElement('button');
+        projectBtn.textContent = `${name}`;
+        projectBtn.setAttribute('id', name);
+        projectHeader.insertBefore(projectBtn, newProjectBtn);
+        projectBtn.addEventListener('click', newNote.noteDisplay);
     };
-
-    function cancelDialog(event){
-        event.preventDefault();
-        projectDialog.close();
-    };
-
 })();
 
-export {newProject}
+const newNote = (function () {
+    const noteDisplay = () => {
+        const noteInstance = document.createElement('div');
+        const newNoteBtn = document.createElement('button');
+        noteContainer.textContent = '';
+        noteInstance.textContent = `${projectLibrary[projectName.value]}`;
+        noteContainer.appendChild(noteInstance);
+
+    };
+    return {noteDisplay}
+})();
+
+export {DOMCreator}

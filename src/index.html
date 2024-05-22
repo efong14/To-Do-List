@@ -9,9 +9,31 @@
         <form action="" method="dialog">
             <div>
                 <label for="projectName">Project Name:</label>
-                <input type="text" id="projectName" placeholder="project 1" required>
+                <input type="text" id="projectName" placeholder="project 1">
             </div>
-            <button id="submit">Submit</button>
+            <button id="projectSubmit">Submit</button>
+            <button id="cancel">Cancel</button>
+        </form>
+    </dialog>
+    <dialog id="noteDialog">
+        <form action="" method="dialog">
+            <div>
+                <label for="noteTitle">Title:</label>
+                <input type="text" id="noteTitle">
+            </div>
+            <div>
+                <label for="noteDescription">Description:</label>
+                <input type="text" id="noteDescription">
+            </div>
+            <div>
+                <label for="noteDueDate">Due Date:</label>
+                <input type="text" id="noteDueDate">
+            </div>
+            <div>
+                <label for="notePriority">Priority:</label>
+                <input type="text" id="notePriority"d>
+            </div>
+            <button id="noteSubmit">Submit</button>
             <button id="cancel">Cancel</button>
         </form>
     </dialog>

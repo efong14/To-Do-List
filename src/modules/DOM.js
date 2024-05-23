@@ -1,11 +1,12 @@
 import { noteBuilder, projectBuilder, projectLibrary } from "./objectBuilder";
 
-const form = document.querySelector('form');
 const noteContainer = document.getElementById('noteContainer');
 const newProjectBtn = document.getElementById('newProject');
 const projectHeader = document.getElementById('projectHeader');
 const projectDialog = document.getElementById('projectDialog');
+const projectForm = document.getElementById('projectForm')
 const noteDialog = document.getElementById('noteDialog');
+const noteForm = document.getElementById('noteForm')
 const projectName = document.getElementById('projectName');
 const noteTitle = document.getElementById('noteTitle');
 const noteDescription = document.getElementById('noteDescription');
@@ -24,7 +25,7 @@ const DOMCreator = (function() {
     
     function openProjectDialog() {
         projectDialog.open = true;
-        form.reset();
+        projectForm.reset();
     };
 
     function cancelDialog(event){
@@ -58,32 +59,49 @@ const newNote = (function () {
     const noteInstance = document.createElement('div');
     const newNoteBtn = document.createElement('button');
 
-    noteSubmitBtn.addEventListener('click', buildNote)
+    noteInstance.classList.add('noteInstance')
+    newNoteBtn.classList.add('newNoteBtn');
+    noteSubmitBtn.addEventListener('click', buildNote);
+
+    const noteDisplay = () => {
+        newNoteBtn.textContent = '+'
+        newNoteBtn.addEventListener('click', openNoteDialog)
+        noteInstance.innerHTML = '';
+        noteContainer.appendChild(noteInstance);
+        noteContainer.appendChild(newNoteBtn);
+        noteLookUp();
+    };
 
     function openNoteDialog() {
         noteDialog.open = true;
-        form.reset();
+        noteForm.reset();
     };
 
     function buildNote() {
         const note = noteBuilder(noteTitle.value, noteDescription.value, noteDueDate.value, notePriority.value);
         note.noteAdder(selectedProject);
-        noteInstance.textContent = `${projectLibrary[selectedProject]}`;
-    }
-
-    const noteDisplay = () => {
-        newNoteBtn.textContent = '+'
-        newNoteBtn.addEventListener('click', openNoteDialog)
-        noteContainer.textContent = '';
-        // noteInstance.textContent = `${projectLibrary[selectedProject]}`; REMOVE
-        noteContainer.appendChild(noteInstance);
-        noteContainer.appendChild(newNoteBtn);
+        noteInstance.innerHTML = ''
+        noteLookUp();
     };
 
-    // Make New Function that loops through each of the selected project's objects and renders its title in the noteInstance field.
+    function noteLookUp() {
+        for(const key in projectLibrary[selectedProject]){
+            const titleDisplay= document.createElement('div');
+            const editBtn = document.createElement('button');
+            editBtn.addEventListener('click', edit);
+            titleDisplay.classList.add('titleDisplay');
+            editBtn.classList.add('editBtn');
+            editBtn.setAttribute('editable', key)
+            titleDisplay.textContent = key;
+            noteInstance.appendChild(titleDisplay);
+            titleDisplay.appendChild(editBtn);
+            };
+        function edit(){
+            console.log(this.getAttribute('editable'))
+        }
+        };
 
-    const displayTest = () => {console.log('Works!')}
-    return {noteDisplay, displayTest}
+    return {noteDisplay}
 })();
 
 export {DOMCreator}

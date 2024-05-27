@@ -35,23 +35,41 @@ const DOMCreator = (function() {
 
     function buildProject(){
         if (projectName.value == ''){return};
-        projectBuilder(projectName.value); 
-        appendProject(projectName.value);
+        const projectBtnContainer = document.createElement('div')
+        projectHeader.insertBefore(projectBtnContainer, newProjectBtn);
+        // Imported from objectBuilder.js
+        const project = projectBuilder(projectName.value); 
+        // Local
+        appendProjectBtn(projectName.value, projectBtnContainer);
+        appendProjectDelete(project, projectBtnContainer)
     // Remove when done
         console.log(projectLibrary)
     };
 
-    function appendProject(name){
+    function appendProjectBtn(name, parent){
         const projectBtn = document.createElement('button');
         projectBtn.textContent = `${name}`;
         projectBtn.setAttribute('id', name);
-        projectHeader.insertBefore(projectBtn, newProjectBtn);
         projectBtn.addEventListener('click', noteDisplaySetter);
+        parent.appendChild(projectBtn)
 
         function noteDisplaySetter() {
             selectedProject = name;
             newNote.noteDisplay();
         }
+    };
+
+    function appendProjectDelete(project, parent){
+        const projectDeleteBtn= document.createElement('button');
+        projectDeleteBtn.textContent = 'X';
+        projectDeleteBtn.classList.add('projectDeleteBtn')
+        projectDeleteBtn.addEventListener('click', deleteProject);
+        parent.appendChild(projectDeleteBtn)
+
+        function deleteProject() {
+            project.projectDeleter();
+            parent.remove();
+        };
     };
 })();
 
@@ -69,7 +87,7 @@ const newNote = (function () {
         noteInstance.innerHTML = '';
         noteContainer.appendChild(noteInstance);
         noteContainer.appendChild(newNoteBtn);
-        noteLookUp();
+        noteLookUp(note);
     };
 
     function openNoteDialog() {
@@ -81,26 +99,48 @@ const newNote = (function () {
         const note = noteBuilder(noteTitle.value, noteDescription.value, noteDueDate.value, notePriority.value);
         note.noteAdder(selectedProject);
         noteInstance.innerHTML = ''
-        noteLookUp();
+        noteLookUp(note);
     };
 
-    function noteLookUp() {
+    function noteLookUp(note) {
+
         for(const key in projectLibrary[selectedProject]){
-            const titleDisplay= document.createElement('div');
-            const editBtn = document.createElement('button');
-            editBtn.addEventListener('click', edit);
+            const titleDisplay = document.createElement('div');
             titleDisplay.classList.add('titleDisplay');
-            editBtn.classList.add('editBtn');
-            editBtn.setAttribute('editable', key)
             titleDisplay.textContent = key;
             noteInstance.appendChild(titleDisplay);
-            titleDisplay.appendChild(editBtn);
+            createEdit(key, titleDisplay);
+            createDelete(key, titleDisplay);
             };
-        function edit(){
-            console.log(this.getAttribute('editable'))
-        }
+
+        function createEdit(key, titleDisplay) {
+            const editBtn = document.createElement('button');
+            editBtn.addEventListener('click', editNote);
+            editBtn.classList.add('editBtn');
+            editBtn.setAttribute('edit', key);
+            editBtn.textContent = 'Edit'
+            titleDisplay.appendChild(editBtn);
+
+        function editNote(){
+            console.log(this.getAttribute('edit'))
+            };
         };
 
+        function createDelete(key, titleDisplay) {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.addEventListener('click', deleteNote);
+            deleteBtn.classList.add('deleteBtn');
+            deleteBtn.setAttribute('delete', key);
+            deleteBtn.textContent = 'Delete'
+            titleDisplay.appendChild(deleteBtn);
+
+            function deleteNote(){
+                note.noteDeleter(selectedProject);
+                titleDisplay.remove()
+            };
+        };
+    };
+    
     return {noteDisplay}
 })();
 

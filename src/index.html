@@ -5,7 +5,7 @@
     <title>To-Do list</title>
 </head>
 <body>
-    <dialog id="projectDialog">
+    <dialog id="projectDialog"> 
         <form action="" method="dialog" id="projectForm">
             <div>
                 <label for="projectName">Project Name:</label>
@@ -34,6 +34,28 @@
                 <input type="text" id="notePriority"d>
             </div>
             <button id="noteSubmit">Submit</button>
+            <button id="cancel">Cancel</button>
+        </form>
+    </dialog>
+    <dialog id="editDialog">
+        <form action="" method="dialog" id="editForm">
+            <div>
+                <label for="editTitle">Title:</label>
+                <input type="text" id="editTitle">
+            </div>
+            <div>
+                <label for="editDescription">Description:</label>
+                <input type="text" id="editDescription">
+            </div>
+            <div>
+                <label for="editDueDate">Due Date:</label>
+                <input type="text" id="editDueDate">
+            </div>
+            <div>
+                <label for="editPriority">Priority:</label>
+                <input type="text" id="editPriority"d>
+            </div>
+            <button id="editSubmit">Submit</button>
             <button id="cancel">Cancel</button>
         </form>
     </dialog>

@@ -1,6 +1,7 @@
-const projectLibrary = {}
+const projectLibrary = {a:0};
 
 function projectBuilder(name) {
+    if(Object.hasOwn(projectLibrary, name) == true) return;
     projectLibrary[name] = {};
 
     const projectDeleter = () => {
@@ -22,12 +23,28 @@ function noteBuilder (noteTitle, noteDescription, noteDueDate, notePriority) {
         projectLibrary[name][noteTitle] = note
     };
 
-    const noteDeleter = (name) => {
-        delete projectLibrary[name][noteTitle];
+    return {noteAdder}
+};
+
+const noteManipulator = (function() {
+
+    const noteDeleter = (selectedProject, noteTitle) => {
+        delete projectLibrary[selectedProject][noteTitle];
+        // Delete when finalized
+        console.log(projectLibrary[selectedProject]);
     };
 
-    return {noteAdder, noteDeleter};
-};
+    const editor = (selectedProject, noteTitle, editedTitle, editedDescription, editedDueDate, editedPriority) => {
+        projectLibrary[selectedProject][noteTitle].title = editedTitle;
+        projectLibrary[selectedProject][noteTitle].description = editedDescription;
+        projectLibrary[selectedProject][noteTitle].dueDate = editedDueDate;
+        projectLibrary[selectedProject][noteTitle].priority = editedPriority;
+        // Delete when finalized
+        console.log(projectLibrary[selectedProject][editedTitle]);
+    };
+
+    return{noteDeleter, editor};
+})();
 
 // Sample 
 
@@ -35,4 +52,4 @@ function noteBuilder (noteTitle, noteDescription, noteDueDate, notePriority) {
 // const note1 = noteBuilder('Run','Run 5 miles','Tomorrow','1');
 // note1.noteAdder('project1')
 
-export {projectLibrary, projectBuilder, noteBuilder}
+export {projectLibrary, projectBuilder, noteBuilder, noteManipulator}

@@ -24,14 +24,16 @@ const editDueDate = document.getElementById('editDueDate');
 const editPriority = document.getElementById('editPriority');
 const editSubmitBtn = document.getElementById('editSubmit');
 
+const allBtn = document.getElementById('all')
 const cancelBtn = document.querySelectorAll('#cancel');
 
 let selectedProject = ''
-let editedNote = ''
+let selectedNote = ''
 
 const DOMCreator = (function() {
     newProjectBtn.addEventListener('click', openProjectDialog);
     projectSubmitBtn.addEventListener('click', buildProject);
+    allBtn.addEventListener('click', displayAll);
     cancelBtn.forEach((button) => button.onclick = () => cancelDialog);
     
     function openProjectDialog() {
@@ -69,7 +71,8 @@ const DOMCreator = (function() {
 
         function noteDisplaySetter() {
             selectedProject = name;
-            newNote.noteDisplay();
+            noteCreator.clearDisplay();
+            noteCreator.noteDisplay();
         }
     };
 
@@ -85,9 +88,17 @@ const DOMCreator = (function() {
             parent.remove();
         };
     };
+
+    function displayAll(){
+        noteCreator.clearDisplay();
+        for(const key in projectLibrary){
+            selectedProject = key;
+            noteCreator.noteDisplay();
+        }
+    }
 })();
 
-const newNote = (function () {
+const noteCreator = (function () {
     const noteInstance = document.createElement('div');
     const newNoteBtn = document.createElement('button');
     noteInstance.classList.add('noteInstance')
@@ -95,36 +106,42 @@ const newNote = (function () {
     noteSubmitBtn.addEventListener('click', buildNote);
     editSubmitBtn.addEventListener('click', submitEdit);
 
-    function submitEdit(){
-        noteManipulator.editor(selectedProject, editedNote, editTitle.value, editDescription.value, editDueDate.value, editPriority.value);
-        noteLookUp();
-        console.log(projectLibrary[selectedProject]);
+    function clearDisplay(){
+        noteInstance.innerHTML = '';
     };
 
     const noteDisplay = () => {
-        newNoteBtn.textContent = '+'
-        newNoteBtn.addEventListener('click', openNoteDialog)
+        newNoteBtn.textContent = '+';
+        newNoteBtn.addEventListener('click', openNoteDialog);
         noteLookUp();
         noteContainer.appendChild(noteInstance);
         noteContainer.appendChild(newNoteBtn);
-    };
 
-    function openNoteDialog() {
-        noteDialog.open = true;
-        noteForm.reset();
+        function openNoteDialog() {
+            noteDialog.open = true;
+            noteForm.reset();
+        };
     };
 
     function buildNote() {
         const note = noteBuilder(noteTitle.value, noteDescription.value, noteDueDate.value, notePriority.value);
         note.noteAdder(selectedProject);
-        noteInstance.innerHTML = ''
+        clearDisplay();
         noteLookUp();
     };
 
+    function submitEdit(){
+        noteManipulator.editor(selectedProject, selectedNote, editTitle.value, editDescription.value, editDueDate.value, editPriority.value);
+        clearDisplay();
+        noteLookUp();
+        console.log(projectLibrary[selectedProject]);
+    };
+
     function noteLookUp() {
-        noteInstance.innerHTML = '';
+        let currentProject = ''
         for(const key in projectLibrary[selectedProject]){
             const titleDisplay = document.createElement('div');
+            currentProject = selectedProject
             titleDisplay.classList.add('titleDisplay');
             titleDisplay.textContent = projectLibrary[selectedProject][key].title;
             noteInstance.appendChild(titleDisplay);
@@ -132,42 +149,43 @@ const newNote = (function () {
             createDelete(key, titleDisplay);
             };
 
-        function createEdit(key, titleDisplay) {
+        function createEdit(key, parent) {
             const editBtn = document.createElement('button');
             editBtn.addEventListener('click', editNote);
-
             editBtn.classList.add('editBtn');
             editBtn.textContent = 'Edit';
-            titleDisplay.appendChild(editBtn);
+            parent.appendChild(editBtn);
 
             function editNote(){
-                editTitle.value = projectLibrary[selectedProject][key].title;
-                editDescription.value = projectLibrary[selectedProject][key].description;
-                editDueDate.value = projectLibrary[selectedProject][key].dueDate;
-                editPriority.value = projectLibrary[selectedProject][key].priority;
+                selectedProject = currentProject;
+                selectedNote = key;
+                editTitle.value = projectLibrary[selectedProject][selectedNote].title;
+                editDescription.value = projectLibrary[selectedProject][selectedNote].description;
+                editDueDate.value = projectLibrary[selectedProject][selectedNote].dueDate;
+                editPriority.value = projectLibrary[selectedProject][selectedNote].priority;
                 editDialog.open = true;
-                editedNote = key;
-                console.log(editedNote)
                 // 
-                console.log(projectLibrary[selectedProject][key])
+                console.log(selectedNote)
             };
         };
 
-        function createDelete(key, titleDisplay) {
+        function createDelete(key, parent) {
             const deleteBtn = document.createElement('button');
             deleteBtn.addEventListener('click', deleteNote);
             deleteBtn.classList.add('deleteBtn');
             deleteBtn.textContent = 'Delete';
-            titleDisplay.appendChild(deleteBtn);
+            parent.appendChild(deleteBtn);
 
             function deleteNote(){
-                noteManipulator.noteDeleter(selectedProject, key);
+                selectedProject = currentProject;
+                selectedNote = key;
+                noteManipulator.noteDeleter(selectedProject, selectedNote);
                 titleDisplay.remove();
             };
         };
     };
 
-return {noteDisplay};
+return {noteDisplay, clearDisplay};
     
 })();
 

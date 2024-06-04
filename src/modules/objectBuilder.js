@@ -1,4 +1,4 @@
-const projectLibrary = {a:0};
+const projectLibrary = {};
 
 function projectBuilder(name) {
     if(Object.hasOwn(projectLibrary, name) == true) return;
@@ -30,8 +30,6 @@ const noteManipulator = (function() {
 
     const noteDeleter = (selectedProject, noteTitle) => {
         delete projectLibrary[selectedProject][noteTitle];
-        // Delete when finalized
-        console.log(projectLibrary[selectedProject]);
     };
 
     const editor = (selectedProject, noteTitle, editedTitle, editedDescription, editedDueDate, editedPriority) => {

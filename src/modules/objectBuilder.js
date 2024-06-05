@@ -37,8 +37,6 @@ const noteManipulator = (function() {
         projectLibrary[selectedProject][noteTitle].description = editedDescription;
         projectLibrary[selectedProject][noteTitle].dueDate = editedDueDate;
         projectLibrary[selectedProject][noteTitle].priority = editedPriority;
-        // Delete when finalized
-        console.log(projectLibrary[selectedProject][editedTitle]);
     };
 
     return{noteDeleter, editor};

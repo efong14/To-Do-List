@@ -29,6 +29,7 @@ const cancelBtn = document.querySelectorAll('#cancel');
 
 let selectedProject = ''
 let selectedNote = ''
+let selectedAll = 'no'
 
 const DOMCreator = (function() {
     newProjectBtn.addEventListener('click', openProjectDialog);
@@ -52,28 +53,12 @@ const DOMCreator = (function() {
             alert('Cannot repeat project name');
             return;
         };
-        
+
         const projectBtnContainer = document.createElement('div')
         projectHeader.insertBefore(projectBtnContainer, newProjectBtn);
-        // Imported from objectBuilder.js
         const project = projectBuilder(projectName.value); 
-        // Local
         appendProjectBtn(projectName.value, projectBtnContainer);
-        appendProjectDelete(project, projectBtnContainer)
-    };
-
-    function appendProjectBtn(name, parent){
-        const projectBtn = document.createElement('button');
-        projectBtn.textContent = `${name}`;
-        projectBtn.setAttribute('id', name);
-        projectBtn.addEventListener('click', noteDisplaySetter);
-        parent.appendChild(projectBtn)
-
-        function noteDisplaySetter() {
-            selectedProject = name;
-            noteCreator.clearDisplay();
-            noteCreator.noteDisplay();
-        }
+        appendProjectDelete(project, projectBtnContainer);
     };
 
     function appendProjectDelete(project, parent){
@@ -89,13 +74,29 @@ const DOMCreator = (function() {
         };
     };
 
+    function appendProjectBtn(name, parent){
+        const projectBtn = document.createElement('button');
+        projectBtn.textContent = `${name}`;
+        projectBtn.setAttribute('id', name);
+        projectBtn.addEventListener('click', noteDisplaySetter);
+        parent.appendChild(projectBtn)
+
+        function noteDisplaySetter() {
+            selectedAll = 'no'
+            selectedProject = name;
+            noteCreator.clearDisplay();
+            noteCreator.noteDisplay();
+        };
+    };
+
     function displayAll(){
         noteCreator.clearDisplay();
+        selectedAll = 'yes'
         for(const key in projectLibrary){
             selectedProject = key;
             noteCreator.noteDisplay();
-        }
-    }
+        };
+    };
 })();
 
 const noteCreator = (function () {
@@ -104,7 +105,7 @@ const noteCreator = (function () {
     noteInstance.classList.add('noteInstance')
     newNoteBtn.classList.add('newNoteBtn');
     noteSubmitBtn.addEventListener('click', buildNote);
-    editSubmitBtn.addEventListener('click', submitEdit);
+
 
     function clearDisplay(){
         noteInstance.innerHTML = '';
@@ -128,13 +129,6 @@ const noteCreator = (function () {
         note.noteAdder(selectedProject);
         clearDisplay();
         noteLookUp();
-    };
-
-    function submitEdit(){
-        noteManipulator.editor(selectedProject, selectedNote, editTitle.value, editDescription.value, editDueDate.value, editPriority.value);
-        clearDisplay();
-        noteLookUp();
-        console.log(projectLibrary[selectedProject]);
     };
 
     function noteLookUp() {
@@ -164,8 +158,31 @@ const noteCreator = (function () {
                 editDueDate.value = projectLibrary[selectedProject][selectedNote].dueDate;
                 editPriority.value = projectLibrary[selectedProject][selectedNote].priority;
                 editDialog.open = true;
-                // 
-                console.log(selectedNote)
+
+                if(selectedAll == 'no'){
+                    editSubmitBtn.addEventListener('click', submitEdit);
+                    function submitEdit(){
+                        noteManipulator.editor(selectedProject, selectedNote, editTitle.value, editDescription.value, editDueDate.value, editPriority.value);
+                        clearDisplay();
+                        noteLookUp();
+                        editSubmitBtn.removeEventListener('click', submitEdit);
+                        // 
+                        console.log(projectLibrary[selectedProject][selectedNote])
+                    };
+                } else {
+                    editSubmitBtn.addEventListener('click', allEdit)
+                    function allEdit(){
+                        noteManipulator.editor(selectedProject, selectedNote, editTitle.value, editDescription.value, editDueDate.value, editPriority.value);
+                        clearDisplay();
+                        for(const key in projectLibrary){
+                        selectedProject = key;
+                        noteDisplay();
+                        };
+                        editSubmitBtn.removeEventListener('click', allEdit)
+                        // 
+                        console.log(projectLibrary[selectedProject][selectedNote])
+                    };
+                };
             };
         };
 
@@ -180,12 +197,12 @@ const noteCreator = (function () {
                 selectedProject = currentProject;
                 selectedNote = key;
                 noteManipulator.noteDeleter(selectedProject, selectedNote);
-                titleDisplay.remove();
+                parent.remove();
             };
         };
     };
 
-return {noteDisplay, clearDisplay};
+return {noteDisplay, noteLookUp, clearDisplay};
     
 })();
 

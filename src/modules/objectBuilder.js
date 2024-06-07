@@ -9,7 +9,7 @@ function projectBuilder(name) {
     };
 
     return {projectDeleter} 
-}
+};
 
 function noteBuilder (noteTitle, noteDescription, noteDueDate, notePriority) {
     const note = {

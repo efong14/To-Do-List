@@ -16,7 +16,8 @@ function noteBuilder (noteTitle, noteDescription, noteDueDate, notePriority) {
         title: noteTitle,
         description: noteDescription,
         dueDate: noteDueDate,
-        priority: notePriority
+        priority: notePriority,
+        completion: 'Not done'
     };
 
     const noteAdder = (name) => {

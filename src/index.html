@@ -30,8 +30,11 @@
                 <input type="date" id="noteDueDate">
             </div>
             <div>
-                <label for="notePriority">Priority:</label>
-                <input type="text" id="notePriority"d>
+                <span>Priority: </span>
+                <input type="radio" id="high" name="priority" value="high">
+                <label for="high">High</label>
+                <input type="radio" id="normal" name="priority" value="normal" checked>
+                <label for="normal">Normal</label>
             </div>
             <button id="noteSubmit">Submit</button>
             <button id="cancel">Cancel</button>
@@ -52,8 +55,11 @@
                 <input type="date" id="editDueDate">
             </div>
             <div>
-                <label for="editPriority">Priority:</label>
-                <input type="text" id="editPriority"d>
+                <span>Priority: </span>
+                <input type="radio" id="editHigh" name="editPriority" value="high">
+                <label for="editHigh">High</label>
+                <input type="radio" id="editNormal" name="editPriority" value="normal">
+                <label for="editNormal">Normal</label>
             </div>
             <button id="editSubmit">Submit</button>
             <button id="cancel">Cancel</button>
@@ -71,7 +77,9 @@
         </header>
     </nav>
     <div class="content">
-        <div id="noteContainer"></div>
+        <div id="noteContainer">
+            <div id="noteInstance"></div>
+        </div>
     </div>
 </body>
 </html>

@@ -1,14 +1,13 @@
-const projectLibrary = {};
+let projectLibrary = {};
 
 function projectBuilder(name) {
-    if(Object.hasOwn(projectLibrary, name) == true) return;
     projectLibrary[name] = {};
+    localStorage.setItem('projectLibraryStorage', JSON.stringify(projectLibrary));
+};
 
-    const projectDeleter = () => {
+function projectDeleter(name){
         delete projectLibrary[name];
-    };
-
-    return {projectDeleter} 
+        localStorage.setItem('projectLibraryStorage', JSON.stringify(projectLibrary));
 };
 
 function noteBuilder (noteTitle, noteDescription, noteDueDate, notePriority) {
@@ -21,7 +20,8 @@ function noteBuilder (noteTitle, noteDescription, noteDueDate, notePriority) {
     };
 
     const noteAdder = (name) => {
-        projectLibrary[name][noteTitle] = note
+        projectLibrary[name][noteTitle] = note;
+        localStorage.setItem('projectLibraryStorage', JSON.stringify(projectLibrary));
     };
 
     return {noteAdder}
@@ -31,6 +31,7 @@ const noteManipulator = (function() {
 
     const noteDeleter = (selectedProject, noteTitle) => {
         delete projectLibrary[selectedProject][noteTitle];
+        localStorage.setItem('projectLibraryStorage', JSON.stringify(projectLibrary));
     };
 
     const editor = (selectedProject, noteTitle, editedTitle, editedDescription, editedDueDate, editedPriority) => {
@@ -38,6 +39,7 @@ const noteManipulator = (function() {
         projectLibrary[selectedProject][noteTitle].description = editedDescription;
         projectLibrary[selectedProject][noteTitle].dueDate = editedDueDate;
         projectLibrary[selectedProject][noteTitle].priority = editedPriority;
+        localStorage.setItem('projectLibraryStorage', JSON.stringify(projectLibrary));
     };
 
     return{noteDeleter, editor};
@@ -49,4 +51,4 @@ const noteManipulator = (function() {
 // const note1 = noteBuilder('Run','Run 5 miles','Tomorrow','1');
 // note1.noteAdder('project1')
 
-export {projectLibrary, projectBuilder, noteBuilder, noteManipulator}
+export {projectLibrary, projectBuilder, projectDeleter,  noteBuilder, noteManipulator}

@@ -1,3 +1,14 @@
+@font-face {
+    font-family: typewriter;
+    src: url('Font/JMH\ Typewriter.ttf');
+}
+
+:root {
+    font-family: typewriter;
+    color: #675D50;
+    font-size: 20px;
+}
+
 body {
     height: 100vh;
     width: 100vw;
@@ -5,6 +16,26 @@ body {
     margin: 0px;
     display: grid;
     grid-template: 1fr 5fr / 1fr 7fr;
+
+}
+
+button {
+    font-family: typewriter;
+    border-style: none;
+    color: #675D50;
+    background-color: white;
+}
+
+button:hover {
+    background-color: #F4991A;
+}
+
+button:focus {
+    background-color: #F4991A;
+}
+
+input {
+    font-family: typewriter;
 }
 
 .title {
@@ -19,26 +50,106 @@ body {
     flex-direction: column;
     grid-row: 2 / 3;
     grid-column: 1 / 2;
-    border: 1px solid black;
-    border-right: none;
+    width: 200px;
+    margin: 10px;
 }
 
 .navbar > button{
     border-style: none;
+    font-size: 20px;
 }
 
 #projectHeader {
     display: flex;
     flex-direction: column;
+}
+
+#projects {
+    display: flex;
+    justify-content: center;
+    height: fit-content;
+    width: 100%;
+    font-size: 30px;
+    border-bottom: 5px solid #F4991A;
+}
+
+.projectContainer {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    font-size: 50px;
+    height: 30px;
+    width: 100%;
+    margin: 5px;
+}
+
+.projectContainer > button {
     font-size: 20px;
 }
 
-#projectHeader > div {
-    align-self: center;
+#newProject {
+    background-color: #d9d9d9;
+    width: 100%;
+    font-size: 20px;
+}
+
+#newProject:hover {
+    background-color: #F4991A;
 }
 
 .content {
     grid-row: 2 / 3;
     grid-column: 2 / 3;
-    border: 1px solid black;
+    background-color: #F9F6F7;
+    margin: 10px;
+    border: #F4991A 3px solid;
+}
+
+.noteEntry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 25px;
+    border: #F4991A 3px solid;
+    border-left: #F4991A 20px solid;
+    padding: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.doneBox {
+    height: 15px;
+    width: 15px;
+    accent-color: #F5B553;
+}
+
+.titleContainer {
+    display: flex;
+    align-items: baseline;
+}
+
+.editBtn, .deleteBtn {
+    background-color: #F9F6F7;
+}
+
+.newNoteBtn {
+    color: white;
+    background-color: #F4991A;
+    border-radius: 100%;
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+}
+
+[cssPriority='high'] {
+    color: #973131;
+    border: #973131 3px solid;
+    border-left: #973131 20px solid;
+}
+
+#projectDialog, #noteDialog, #editDialog{
+    border: black solid 1px;
+    top: 300px;
 }

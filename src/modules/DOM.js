@@ -1,5 +1,7 @@
 import {  projectBuilder, projectLibrary, projectDeleter, noteBuilder, noteManipulator,} from "./objectBuilder";
-import { isToday, isThisWeek } from 'date-fns'
+import { isToday, isThisWeek } from 'date-fns';
+import editIcon from '../Icons/edit.svg';
+import deleteIcon from '../Icons/delete.svg';
 
 const newProjectBtn = document.getElementById('newProject');
 const projectHeader = document.getElementById('projectHeader');
@@ -15,15 +17,12 @@ const noteForm = document.getElementById('noteForm')
 const noteTitle = document.getElementById('noteTitle');
 const noteDescription = document.getElementById('noteDescription');
 const noteDueDate = document.getElementById('noteDueDate');
-const highPriority = document.getElementById('highPriority');
 const noteSubmitBtn = document.getElementById('noteSubmit');
 
 const editDialog = document.getElementById('editDialog');
-const editForm = document.getElementById('editForm')
 const editTitle = document.getElementById('editTitle');
 const editDescription = document.getElementById('editDescription');
 const editDueDate = document.getElementById('editDueDate');
-const editHighPriority = document.getElementById('editHighPriority');
 const editSubmitBtn = document.getElementById('editSubmit');
 
 const allBtn = document.getElementById('all');
@@ -43,12 +42,12 @@ const noteCreator = (function () {
 
     function clearDisplay(){
         noteInstance.innerHTML = '';
+        newNoteBtn.remove();
     };
 
     const newNoteBtnAppend = () => {
         newNoteBtn.textContent = '+';
         newNoteBtn.addEventListener('click', openNoteDialog);
-        noteContainer.appendChild(noteInstance);
         noteContainer.appendChild(newNoteBtn);
 
         function openNoteDialog() {
@@ -76,13 +75,21 @@ const noteCreator = (function () {
         let currentProject = selectedProject;
         let currentNote = selectedNote;
 
+        const noteEntry = document.createElement('div');
         const titleContainer = document.createElement('div');
+        const buttonContainer = document.createElement('div');
+        noteEntry.classList.add('noteEntry');
         titleContainer.classList.add('titleContainer');
-        noteInstance.appendChild(titleContainer);
+        buttonContainer.classList.add('buttonContainer');
+        noteInstance.appendChild(noteEntry);
+        noteEntry.appendChild(titleContainer);
+        noteEntry.appendChild(buttonContainer);
+        
 
         const doneBox = document.createElement('input');
         doneBox.setAttribute('type', 'checkbox');
         doneBox.setAttribute('value', 'done');
+        doneBox.setAttribute('class', 'doneBox');
         doneBox.addEventListener('change', changed);
         titleContainer.appendChild(doneBox);
         if(projectLibrary[selectedProject][selectedNote].completion == 'Done') doneBox.checked = true;
@@ -103,14 +110,17 @@ const noteCreator = (function () {
         titleDisplay.classList.add('titleDisplay');
         titleDisplay.setAttribute('id', `${selectedNote}`);
         titleDisplay.setAttribute('completion', `${projectLibrary[selectedProject][selectedNote].completion}`);
+        noteEntry.setAttribute('cssPriority', `${projectLibrary[selectedProject][selectedNote].priority}`);
         titleDisplay.setAttribute('priority', `${projectLibrary[selectedProject][selectedNote].priority}`);
         titleDisplay.textContent = projectLibrary[selectedProject][note].title;
         titleContainer.appendChild(titleDisplay);
 
         const editBtn = document.createElement('button');
+        let editImg = new Image();
+        editImg.src = editIcon;
         editBtn.classList.add('editBtn');
-        editBtn.textContent = 'Edit';
-        titleContainer.appendChild(editBtn);
+        buttonContainer.appendChild(editBtn);
+        editBtn.appendChild(editImg)
         editBtn.addEventListener('click', editNote);
         editSubmitBtn.addEventListener('click', submitEdit);
         function editNote(){
@@ -134,18 +144,21 @@ const noteCreator = (function () {
             noteManipulator.editor(selectedProject, selectedNote, editTitle.value, editDescription.value, editDueDate.value, document.querySelector('input[name = editPriority]:checked').value);
             document.getElementById(`${selectedNote}`).textContent = editTitle.value;
             titleDisplay.setAttribute('priority', `${projectLibrary[selectedProject][selectedNote].priority}`);
+            noteEntry.setAttribute('cssPriority', `${projectLibrary[selectedProject][selectedNote].priority}`);
         };
 
         const deleteBtn = document.createElement('button');
+        let deleteImg = new Image();
+        deleteImg.src = deleteIcon;
         deleteBtn.addEventListener('click', deleteNote);
         deleteBtn.classList.add('deleteBtn');
-        deleteBtn.textContent = 'Delete';
-        titleContainer.appendChild(deleteBtn);
+        buttonContainer.appendChild(deleteBtn);
+        deleteBtn.appendChild(deleteImg)
         function deleteNote(){
             selectedProject = currentProject;
             selectedNote = currentNote;
             noteManipulator.noteDeleter(selectedProject, selectedNote);
-            titleContainer.remove();
+            noteEntry.remove();
         };
     };
 
@@ -162,13 +175,12 @@ const DOMManipulator = (function() {
         projectLibrary = projectStorage;
         for(const project in projectLibrary){
             const projectBtnContainer = document.createElement('div');
+            projectBtnContainer.classList.add('projectContainer');
             projectHeader.insertBefore(projectBtnContainer, newProjectBtn);
             appendProjectBtn(project, projectBtnContainer);
             appendProjectDelete(project, projectBtnContainer);
         };
-        // 
         displayAll();
-        // 
     } else {
         console.log('Nothing!')
     }
@@ -198,7 +210,8 @@ const DOMManipulator = (function() {
             return;
         };
 
-        const projectBtnContainer = document.createElement('div')
+        const projectBtnContainer = document.createElement('div');
+        projectBtnContainer.classList.add('projectContainer');
         projectHeader.insertBefore(projectBtnContainer, newProjectBtn);
         projectBuilder(projectName.value); 
         appendProjectBtn(projectName.value, projectBtnContainer);

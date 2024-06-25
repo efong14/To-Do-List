@@ -23,7 +23,7 @@ button {
     border-style: none;
     color: #675D50;
     background-color: white;
-}
+} 
 
 button:hover {
     background-color: #F4991A;
@@ -49,7 +49,7 @@ input {
     flex-direction: column;
     grid-row: 2 / 3;
     grid-column: 1 / 2;
-    width: 200px;
+    width: 100%;
     margin: 10px;
     margin-left: 0px;
     margin-right: 0px;
@@ -60,6 +60,14 @@ input {
     border-style: none;
     font-size: 20px;
     background-color: #F9F2ED;
+}
+
+.navbar > button:hover {
+    background-color: #F4991A;
+}
+
+.navbar > button:focus {
+    background-color: #F4991A;
 }
 
 #projectHeader {
@@ -89,6 +97,14 @@ input {
 .projectContainer > button {
     font-size: 20px;
     background-color: #F9F2ED;
+}
+
+.projectContainer > button:hover {
+    background-color: #F4991A;
+}
+
+.projectContainer > button:focus {
+    background-color: #F4991A;
 }
 
 #newProject {

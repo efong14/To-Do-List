@@ -111,7 +111,7 @@ const noteCreator = (function () {
         titleDisplay.setAttribute('id', `${selectedNote}`);
         titleDisplay.setAttribute('completion', `${projectLibrary[selectedProject][selectedNote].completion}`);
         noteEntry.setAttribute('cssPriority', `${projectLibrary[selectedProject][selectedNote].priority}`);
-        titleDisplay.setAttribute('priority', `${projectLibrary[selectedProject][selectedNote].priority}`);
+        noteEntry.setAttribute('id', `css${selectedNote}`);
         titleDisplay.textContent = projectLibrary[selectedProject][note].title;
         titleContainer.appendChild(titleDisplay);
 
@@ -143,8 +143,7 @@ const noteCreator = (function () {
             };
             noteManipulator.editor(selectedProject, selectedNote, editTitle.value, editDescription.value, editDueDate.value, document.querySelector('input[name = editPriority]:checked').value);
             document.getElementById(`${selectedNote}`).textContent = editTitle.value;
-            titleDisplay.setAttribute('priority', `${projectLibrary[selectedProject][selectedNote].priority}`);
-            noteEntry.setAttribute('cssPriority', `${projectLibrary[selectedProject][selectedNote].priority}`);
+            document.getElementById(`css${selectedNote}`).setAttribute('cssPriority', `${projectLibrary[selectedProject][selectedNote].priority}`);
         };
 
         const deleteBtn = document.createElement('button');

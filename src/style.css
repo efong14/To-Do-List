@@ -6,7 +6,6 @@
 :root {
     font-family: typewriter;
     color: #675D50;
-    font-size: 20px;
 }
 
 body {
@@ -52,11 +51,15 @@ input {
     grid-column: 1 / 2;
     width: 200px;
     margin: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+    background-color: #F9F2ED;
 }
 
 .navbar > button{
     border-style: none;
     font-size: 20px;
+    background-color: #F9F2ED;
 }
 
 #projectHeader {
@@ -102,7 +105,7 @@ input {
     grid-column: 2 / 3;
     background-color: #F9F6F7;
     margin: 10px;
-    border: #F4991A 3px solid;
+    margin-left: 0px;
 }
 
 .noteEntry {
@@ -110,8 +113,8 @@ input {
     justify-content: space-between;
     align-items: center;
     font-size: 25px;
-    border: #F4991A 3px solid;
-    border-left: #F4991A 20px solid;
+    border: #F4991A 1px solid;
+    border-left: #F4991A 10px solid;
     padding: 10px;
     margin-top: 10px;
     margin-left: 10px;
@@ -145,8 +148,8 @@ input {
 
 [cssPriority='high'] {
     color: #973131;
-    border: #973131 3px solid;
-    border-left: #973131 20px solid;
+    border: #973131 1px solid;
+    border-left: #973131 10px solid;
 }
 
 #projectDialog, #noteDialog, #editDialog{

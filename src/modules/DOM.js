@@ -168,21 +168,21 @@ return {clearDisplay, showNote, newNoteBtnAppend};
 const DOMManipulator = (function() {
 
     let projectStorage = JSON.parse(localStorage.getItem('projectLibraryStorage'));
-    console.log(projectStorage)
 
-    if(Object.keys(projectStorage).length !== 0){
-        projectLibrary = projectStorage;
-        for(const project in projectLibrary){
-            const projectBtnContainer = document.createElement('div');
-            projectBtnContainer.classList.add('projectContainer');
-            projectHeader.insertBefore(projectBtnContainer, newProjectBtn);
-            appendProjectBtn(project, projectBtnContainer);
-            appendProjectDelete(project, projectBtnContainer);
+
+    if (projectStorage){
+        if(Object.keys(projectStorage).length !== 0){
+            projectLibrary = projectStorage;
+            for(const project in projectLibrary){
+                const projectBtnContainer = document.createElement('div');
+                projectBtnContainer.classList.add('projectContainer');
+                projectHeader.insertBefore(projectBtnContainer, newProjectBtn);
+                appendProjectBtn(project, projectBtnContainer);
+                appendProjectDelete(project, projectBtnContainer);
+            };
+            displayAll();
         };
-        displayAll();
-    } else {
-        console.log('Nothing!')
-    }
+    };
 
     newProjectBtn.addEventListener('click', openProjectDialog);
     projectSubmitBtn.addEventListener('click', buildProject);
